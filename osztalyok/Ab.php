@@ -8,7 +8,7 @@ class Ab {
 
   protected function connect() {
 
-    $this->host="localhost"; // ezt majd át kell írni!
+    $this->host="localhost"; 
     $this->user="root222";
     $this->pass="SIMO.321";
     $this->abNev="utazas";

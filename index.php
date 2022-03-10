@@ -1,13 +1,14 @@
 <?php
-error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 session_start();
 require_once('osztalyok/Ab.php');
 require_once('osztalyok/Felhasznalo.php');
 require_once('osztalyok/Utazas.php');
-//------------ példányosítás---------------------------------------
+
+//---példányosítás---
 $felhasznalo = new Felhasznalo;
 $utazas = new Utazas;
-//------------ Kilépés esetén ez törli a $_SESSION változókat------
+
+//---Kilépés, és $_SESSION változók törlése--
 if($_GET['menu'] == 'kilepes'){
 	$_SESSION['user'] = '';
 	$_SESSION['user_id'] = '';
@@ -16,6 +17,7 @@ if($_GET['menu'] == 'kilepes'){
 	$_SESSION['user_stat'] = '';
 }
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -27,7 +29,8 @@ if($_GET['menu'] == 'kilepes'){
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <!-- Ikonok kellékei-->
+  
+  <!-- Ikonok-->
   <link rel="stylesheet" id="font-awesome-official-css"  href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" type="text/css" media="all" integrity="sha384-v8BU367qNbs/aIZIxuivaU55N5GPF89WBerHoGA4QTcbUjYiLQtKdrfXnqAcXyTv" crossorigin="anonymous" />
   <link rel="stylesheet" id="font-awesome-official-v4shim-css"  href="https://use.fontawesome.com/releases/v5.12.1/css/v4-shims.css" type="text/css" media="all" integrity="sha384-C8a18+Gvny8XkjAdfto/vjAUdpGuPtl1Ix/K2BgKhFaVO6w4onVVHiEaN9h9XsvX" crossorigin="anonymous" />
   <style id="font-awesome-official-v4shim-inline-css" type="text/css">
@@ -117,7 +120,6 @@ if($_GET['menu'] == 'kilepes'){
 	</div>
 </div>
 <?php if(!$_GET['menu'] || $_GET['menu'] == 'kilepes' || $_GET['menu'] == 'fooldal') { ?>
-  <!-- Jumbotron -->
   <div class="bg-image p-5 text-center mb-5 text-white" style="background-image: url('img/city.jpg');">
     <h1 class="h2">MICROTRAVEL</h1>
 		<p class="mb-5"><strong>Exlúzív utazások elérhető áron</strong></p>
@@ -130,22 +132,18 @@ if($_GET['menu'] == 'kilepes'){
       <a class="btn btn btn-light btn-lg text-dark" href="/microtravel/kapcsolat">KAPCSOLAT</a>
     </p>
   </div>
-  <!-- Jumbotron -->
 <?php } ?>
 
-<!-- A Modal -->
+<!-- Login Modal -->
 <div class="modal" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
-
-      <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Bejelentkezés</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <!-- Modal body -->
       <div class="modal-body">
-        <!-- Bejelentkező form -->
+        <!-- Bejelentkezés-->
         <div class="row">
           <div class="col-sm-12 form-group text-center">
           <form method="POST">
@@ -174,7 +172,6 @@ if($_GET['menu'] == 'kilepes'){
          </div>
 		    </div>
       </div>
-      <!-- Modal footer -->
       <div class="modal-footer">
         <button class="btn btn-outline-success" data-toggle="collapse" data-target="#demo">Regisztráció</button> <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Bezár</button>
       </div>
@@ -182,7 +179,7 @@ if($_GET['menu'] == 'kilepes'){
   </div>
 </div>
 <?php
-//---- itt hívjuk munkára a felhasználó osztály függvényeit -----------
+//---- belepes -----------
 
 if(isset($_POST['go_belep'])){
 
@@ -196,7 +193,7 @@ if(isset($_POST['go_reg'])){
 ?>
 <div class="container-fluid">
 	<?php
-//--- Itt kezdődik a főblokk. Ebbe a blokkba töltjük be a különböző tartalmakat a menüre kattintások függvényében ------
+//--- menü betöltés------
 
 	if(!$_GET['menu'] || $_GET['menu'] == 'kilepes' || $_GET['menu'] == 'fooldal'){
 
@@ -208,7 +205,6 @@ if(isset($_POST['go_reg'])){
 		include('contents/con_'.$_GET['menu'].'.php');
 
 	}
-//--- !Itt kezdődik a főblokk. Ebbe a blokkba töltjük be a különböző tartalmakat a menüre kattintások függvényében ------
 	?>
   <div class="pt-5 pb-5 fluid-container own-footer">
     <div class="container">
@@ -218,7 +214,7 @@ if(isset($_POST['go_reg'])){
     </div>
   </div>
 </div>
-<!-- Ellenörző JS-(ek) -->
+<!-- Password ellenőrzés -->
 <script>
 $('.btn-own').click(function (event) {
 	if (PASS1.value != PASS2.value) {
@@ -227,6 +223,5 @@ $('.btn-own').click(function (event) {
 	}
 });
 </script>
-<!-- !Ellenörző JS-(ek) -->
 </body>
 </html>

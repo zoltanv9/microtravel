@@ -2,14 +2,8 @@
 class Felhasznalo extends Ab {
 
   public function FelhasznaloReg($kedv_varos) {
-	//--adatbázis kapcsolat felhasználása. Öröklés az Ab-ből
+	//--adatbázis kapcsolat
     $con = $this->connect();
-	//-------megtisztítjuk a beérkező tartalmakat (űrlapból operátorok inakiválása)
-	$nev = $con->real_escape_string($_POST['nev']);
-  $email = $con->real_escape_string($_POST['email']);
-  $tel = $con->real_escape_string($_POST['tel']);
-  $pass = $con->real_escape_string($_POST['pass1']);
-	$pass = sha1($pass);
 	$stat = 0;
 	$siker = 0;
 	$datum = date('Y-m-d');
@@ -22,7 +16,7 @@ class Felhasznalo extends Ab {
                      $siker = 1;
                      echo '<script> alert("Az E-mail cím már foglalt."); </script>';
                   }
-	//------ letárolás php $stmt segítségével. Segédanyag a működésről: https://www.w3schools.com/php/php_mysql_prepared_statements.asp------
+	//------ letárolás -----
 	if($siker != 1){
 	$stmt = $con->prepare("INSERT INTO felhasznalok (nev,email,tel,pass,reg_datum,stat) VALUES (?,?,?,?,?,?)");
 
@@ -42,7 +36,6 @@ class Felhasznalo extends Ab {
             		while ($array = $result->fetch_assoc()) {
 						            $_SESSION['user_id'] = $array['f_id'];
 					      }
-  //------ Beszereljük a kedvelt városokat -------------------------------------
                 $kedvVarosTomb = explode(',',$kedv_varos);
                 $user_id = $_SESSION['user_id'];
                 foreach($kedvVarosTomb as $key => $value) {
@@ -112,7 +105,6 @@ class Felhasznalo extends Ab {
             }
             return $felhasznfo_adat;
   }
-  //-------------------------felhasználó lekérdezés----------------------------
   public function felhasznaloLekerdez($f_id) {
 
             $con = $this->connect();
@@ -137,7 +129,6 @@ class Felhasznalo extends Ab {
             }
             return $egyfelhaszn_adat;
   }
-  //----------------------------------------------------------------------------
   public function FelhasznStatMod($akt,$fid,$menu){
 
 		  $con = $this->connect();
@@ -163,15 +154,9 @@ class Felhasznalo extends Ab {
   public function FelhasznMod($f_id, $oldal) {
 			//felhasználjuk a kész db kapcsolatot
             $con = $this->connect();
-			//változókba tesszük a POST jövevényeket (real_escape_string - stringé alakítja (\?\*\') az operátorokat. Azért kell, mert különben támadható a mezőn keresztül a DB. )
-            $nev = $con->real_escape_string($_POST['nev']);
-            $email = $con->real_escape_string($_POST['email']);
-            $tel = $con->real_escape_string($_POST['tel']);
-            $pass = $con->real_escape_string($_POST['pass1']);
             $pass_sha = sha1($pass);
 			      $tel = ($tel == '' ? 'Nem adott meg számot': $tel);
             $siker = 0;
-// -----email  cím ellenőrzés ----------------
                 $sql = "SELECT f_id, email FROM felhasznalok WHERE email = '$email'";
                       $result = $con->query($sql);
                           $i = 0;
@@ -184,12 +169,10 @@ class Felhasznalo extends Ab {
                               $siker = 1;
                               echo '<script> alert("Az E-mail cím már foglalt."); </script>';
                           }
-//--------------meta adat törlése a meta táblábólegal---------------
 
             if($siker != 1 && $_POST['kedv_varos'] != ''){
               $sql = "DELETE FROM felhasznalo_meta WHERE f_id = '$f_id'";
                         if ($con->query($sql) === TRUE) {
-                          //------ Beszereljük a kedvelt városokat -------------------------------------
                             $kedvVarosTomb = explode(',',$_POST['kedv_varos']);
                             foreach($kedvVarosTomb as $key => $value) {
                                 $stmtv = $con->prepare("INSERT INTO felhasznalo_meta (f_id,f_kedv_varos) VALUES (?,?)");
@@ -198,7 +181,7 @@ class Felhasznalo extends Ab {
                             }
                         }
             }
-//--------------módosítás, ha írtunk jelszót ----------------
+
             if($siker != 1 && $pass != ''){
                 $stmt = $con->prepare("UPDATE felhasznalok SET nev=?, email=?, tel=?, pass=? WHERE f_id=?");
                 $stmt->bind_param("ssssi", $nev, $email, $tel, $pass_sha, $f_id);
@@ -209,7 +192,6 @@ class Felhasznalo extends Ab {
                   echo '<meta http-equiv="refresh" content="0;url=index.php?mod='.$f_id.'&menu='.$oldal.'">';
                 }
             }
-//--------------módosítás, ha nem írtunk jelszót----------------------
             if($siker != 1 && $pass == ''){
                 $stmt = $con->prepare("UPDATE felhasznalok SET nev=?, email=?, tel=? WHERE f_id=?");
                 $stmt->bind_param("sssi", $nev, $email, $tel, $f_id);
@@ -219,20 +201,6 @@ class Felhasznalo extends Ab {
                 }
             }
         }
-/* ----- Véglges, fizikai törlés modell ---------------
-	public function felhasznDel($del_id) {
-
-            $con = $this->connect();
-
-			$sql = "DELETE FROM felhasznalok WHERE f_id = '$del_id'";
-                if ($con->query($sql) === TRUE) {
-
-                  echo'<script> alert("Sikeres törlés.") </script>';
-                  echo '<meta http-equiv="refresh" content="0;url=http://localhost:90/db-teszt/index.php?menu=adatleker">';
-
-                }
-	}
- ----- Véglges, fizikai törlés modell --------------- */
 
 	public function felhasznBelep() {
 

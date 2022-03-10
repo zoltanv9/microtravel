@@ -15,7 +15,6 @@ Vestibulum dapibus tristique urna, quis rhoncus velit lacinia sit amet. Fusce he
 		</div>
 </div>
 </div>
-<!-- Következő sor, ami teljes szélességű "SZOLGÁLTATÁSAINK" -->
 <div style="background-color:#666666" class="pt-5 pb-5 row">
 	<div class="container szolg-cont">
 		<div class="pb-5 row">
