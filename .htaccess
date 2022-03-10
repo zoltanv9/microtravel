@@ -1,18 +1,7 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
 
-RewriteCond ${REQUEST_URI} ^.+$
-RewriteCond %{REQUEST_FILENAME} \.(gif|jpe?g|png|js|css|swf|php|ico|txt|pdf|xml|doc|docx)$ [OR]
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d [OR]
-RewriteCond %{REQUEST_FILENAME} -l
-RewriteRule ^ - [L]
-
-RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-RewriteRule ^(.+)/(.+)/(.+)/?$ index.php?menu=$1&typ=$2&erdekel=$3 [L]
-RewriteRule ^(.+)/(.+)/?$ index.php?menu=$1&typ=$2 [L]
 RewriteRule ^(.+)/?$ index.php?menu=$1 [L]
 </IfModule>
